@@ -5,8 +5,18 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
+
   export default {
-    name: 'singer-detail'
+    name: 'singer-detail',
+    created () {
+      console.log(this.singer)
+    },
+    computed: {
+      ...mapGetters([
+        'singer'
+      ])
+    }
   }
 </script>
 
