@@ -6,12 +6,12 @@
     <ul ref="listUl">
       <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
-        <uL>
+        <ul>
           <li v-for="item in group.items" class="list-group-item" @click="selectItem(item)">
-            <img class="avatar" v-lazy="item.avatar">
+            <img class="avatar" v-lazy="item.pic">
             <span class="name">{{item.name}}</span>
           </li>
-        </uL>
+        </ul>
       </li>
     </ul>
     <div class="list-shortcut" @touchstart.stop.prevent="onShortcutTouchStart"
@@ -137,7 +137,7 @@
             this.currentIndex = i
             // 每个区间的上限值y值减去当前y值，得到一个距离
             this.diff = height2 - newY
-            console.log(this.diff)
+            // console.log(this.diff)
             return
           }
         }
