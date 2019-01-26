@@ -49,12 +49,29 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: config.dev.poll,
     },
     before (app) {
+      // 得到歌单列表
       app.get('/getDiscList', function (req, res) {
         var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com/',
             host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 得到歌手列表
+      app.get('/getSingerList', function (req, res) {
+        var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg?'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/portal/singer_list.html',
+            origin: 'https://y.qq.com'
           },
           params: req.query
         }).then((response) => {
