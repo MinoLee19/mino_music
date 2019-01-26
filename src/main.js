@@ -4,6 +4,7 @@ import App from './App'
 import fastclick from 'fastclick'
 import 'common/stylus/index.styl'
 import router from './router'
+import store from './store'
 import VueLazyLoad from 'vue-lazyload'
 
 // 消除点击3s延迟
@@ -18,5 +19,6 @@ Vue.use(VueLazyLoad, {
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
