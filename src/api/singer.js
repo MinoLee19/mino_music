@@ -27,3 +27,27 @@ export function getSingerList () {
     return Promise.resolve(res.data)
   })
 }
+
+export function getSingerDetail (mid) {
+  var url = '/getSingerDetail'
+
+  const data = Object.assign({}, commonParams, {
+    loginUin: 0,
+    hostUin: 0,
+    format: 'json',
+    platform: 'yqq.json',
+    needNewCode: 0,
+    ct: 24,
+    singermid: mid,
+    order: 'listen',
+    begin: 0,
+    num: 30,
+    songstatus: 1
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
