@@ -4,22 +4,19 @@
       <i class="icon-back"></i>
     </div>
     <h1 class="title" v-html="title"></h1>
-    <div class="bg-image" ref="bgImage" :style="bgStyle">
-      <div class="play-wrapper">
-        <div ref="playBtn" class="play" v-show="songs.length>0">
-          <i class="icon-play"></i>
-          <span class="text">随机播放全部</span>
-        </div>
-      </div>
-      <div class="filter" ref="filter"></div>
-    </div>
     <scroll :data="songs"
-            :listen-scroll="listenScroll"
             :mode="scrollMode"
             :height="scrollHeight"
-            class="list"
-            ref="list"
-            @scroll="scroll">
+            class="list">
+      <div class="bg-image" :style="bgStyle">
+        <div class="play-wrapper">
+          <div ref="playBtn" class="play" v-show="songs.length>0">
+            <i class="icon-play"></i>
+            <span class="text">随机播放全部</span>
+          </div>
+        </div>
+        <div class="filter"></div>
+      </div>
       <song-list :songs="songs"></song-list>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -32,10 +29,8 @@
   import SongList from 'base/song-list/song-list'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
-  import {prefixStyle} from 'common/js/dom'
 
   const RESERVED_HEIGHT = 40
-  const transform = prefixStyle('transform')
 
   export default {
     props: {
@@ -45,20 +40,16 @@
       },
       songs: {
         type: Array,
-        default: []
+        default: function () {
+          return []
+        }
       },
       title: {
         type: String,
         default: ''
       }
     },
-    data () {
-      return {
-        scrollY: 0
-      }
-    },
     created () {
-      this.listenScroll = true
       this.scrollMode = false
       this.scrollHeight = document.documentElement.clientHeight - RESERVED_HEIGHT || document.body.clientHeight - RESERVED_HEIGHT
     },
@@ -73,11 +64,6 @@
       Loading
     },
     methods: {
-      scroll (val) {
-        if (val < 260 - RESERVED_HEIGHT) {
-          this.$refs.list.$el.style[transform] = `translateY(${-val}px)`
-        }
-      },
       back () {
         this.$router.back()
       }
@@ -158,13 +144,13 @@
 
   .list
     position fixed
-    top 260px
+    top 40px
     background-color $color-background
     z-index 100
 
   .loading-container
     position: absolute
     width: 100%
-    top: 30%
+    top: 50%
     transform: translateY(-50%)
 </style>
