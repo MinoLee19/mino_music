@@ -67,10 +67,25 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       // 得到歌手列表
       app.get('/getSingerList', function (req, res) {
-        var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg?'
+        var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://y.qq.com/portal/singer_list.html',
+            origin: 'https://y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 得到歌手详情
+      app.get('/getSingerDetail', function (req, res) {
+        var url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
+        axios.get(url, {
+          headers: {
             origin: 'https://y.qq.com'
           },
           params: req.query

@@ -14,6 +14,12 @@
       }
     },
     props: {
+      data: {
+        type: Array,
+        default: function () {
+          return []
+        }
+      },
       // 若不是自动填充高度的模式，可指定一个高度，默认是200
       height: {
         type: Number,
@@ -40,9 +46,12 @@
       }
 
       if (this.listenScroll) {
+        console.log('listen scroll start')
         let me = this
-        this.$refs.scroll.onscroll = function () {
+        this.$refs.scroll.onscroll = function (e) {
+          console.log('1--' + this.scrollTop)
           me.$emit('scroll', this.scrollTop)
+          e.stopPropagation()
         }
       }
     },
@@ -74,6 +83,7 @@
     display none
 
   .scroll
+    width 100%
     position relative
     overflow-x hidden
     overflow-y scroll

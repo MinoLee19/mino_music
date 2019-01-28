@@ -30,7 +30,7 @@
     methods: {
       selectSinger (singer) {
         this.$router.push({
-          path: `/singer/${singer.id}`
+          path: `/singer/${singer.mid}`
         })
         this.setSinger(singer)
       },
@@ -55,7 +55,8 @@
             map.hot.items.push({
               name: item.singer_name,
               mid: item.singer_mid,
-              pic: item.singer_pic
+              pic: item.singer_pic,
+              bigPic:`http://y.gtimg.cn/music/photo_new/T001R300x300M000${item.singer_mid}.jpg`
             })
           }
 
@@ -71,7 +72,8 @@
             map[key].items.push({
               name: item.singer_name,
               mid: item.singer_mid,
-              pic: item.singer_pic
+              pic: item.singer_pic,
+              bigPic:`http://y.gtimg.cn/music/photo_new/T001R300x300M000${item.singer_mid}.jpg`
             })
           }
         })
