@@ -30,7 +30,6 @@
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
   import {mapActions} from 'vuex'
-  import {selectPlay} from '../../store/actions'
 
   const RESERVED_HEIGHT = 40
 
