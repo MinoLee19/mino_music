@@ -95,6 +95,24 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       })
+
+      //得到歌曲vkey
+      app.get('/getSongVkey', function (req, res) {
+        var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/portal/player.html',
+            origin: 'https://y.qq.com',
+            'Content-type':'application/x-www-form-urlencoded'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
     }
   },
   plugins: [
