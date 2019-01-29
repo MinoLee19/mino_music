@@ -25,29 +25,46 @@
         default: 0
       }
     },
-    created() {
+    created () {
       this.touch = {}
     },
     methods: {
-      progressTouchStart(e) {
+      progressTouchStart (e) {
+        // 初始化标志位
         this.touch.initiated = true
+        // 记录第一次点击的位置
         this.touch.startX = e.touches[0].pageX
+        // 记录已经滚动的进度条的宽度
         this.touch.left = this.$refs.progress.clientWidth
       },
-      progressTouchMove(e) {
-
+      progressTouchMove (e) {
+        // 判断是否初始化
+        if (!this.touch.initiated) {
+          return
+        }
+        // 计算x轴上的距离(手指移动的偏移量)
+        const deltaX = e.touches[0].pageX - this.touch.startX
+        // 偏移量应大于0,小于barWidth
+        const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX))
+        this._offset(offsetWidth)
       },
-      progressTouchEnd() {
-
+      progressTouchEnd () {
+        this.touch.initiated = false
+        this._triggerPercent()
       },
-      _offset(offsetWidth) {
+      _triggerPercent () {
+        const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+        const percent = this.$refs.progress.clientWidth / barWidth
+        this.$emit('percentChange', percent)
+      },
+      _offset (offsetWidth) {
         this.$refs.progress.style.width = `${offsetWidth}px`
         this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
       }
     },
     watch: {
-      percent(newPercent) {
-        if (newPercent >= 0) {
+      percent (newPercent) {
+        if (newPercent >= 0 && !this.touch.initiated) {
           const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
           const offsetWidth = newPercent * barWidth
           this._offset(offsetWidth)
