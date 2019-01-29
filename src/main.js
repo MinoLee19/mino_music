@@ -5,15 +5,16 @@ import fastclick from 'fastclick'
 import 'common/stylus/index.styl'
 import router from './router'
 import store from './store'
-import VueLazyLoad from 'vue-lazyload'
+import 'mint-ui/lib/style.css'
+import {Swipe, SwipeItem, Lazyload} from 'mint-ui'
 
 // 消除点击3s延迟
 fastclick.attach(document.body)
 
-// 懒加载
-Vue.use(VueLazyLoad, {
-  loading: require('common/image/logo.png')
-})
+// mint-ui
+Vue.component(Swipe.name, Swipe)
+Vue.component(SwipeItem.name, SwipeItem)
+Vue.use(Lazyload)
 
 /* eslint-disable no-new */
 new Vue({

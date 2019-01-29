@@ -24,8 +24,4 @@
   }
 </script>
 
-<style>
-  html {
-    overflow: -moz-scrollbars-none;
-  }
-</style>
+<style></style>

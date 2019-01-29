@@ -2,14 +2,11 @@
   <div class="recommend" ref="recommend">
     <scroll>
       <div v-if="recmdSlider.length" class="recmd-slider">
-        <swiper :options="swiper1">
-          <swiper-slide v-for="(item,index) in recmdSlider" :key="index">
-            <a :href="item.linkUrl">
-              <img :src="item.picUrl" class="swiper-img">
-            </a>
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
+        <mt-swipe :auto="3000">
+          <mt-swipe-item v-for="(item,index) in recmdSlider" :key="index">
+            <img :src="item.picUrl" class="swiper-img">
+          </mt-swipe-item>
+        </mt-swipe>
       </div>
       <div v-if="discList.length" class="disc-list">
         <h1 class="disc-title">热门歌单推荐</h1>
@@ -38,8 +35,6 @@
 <script type="text/ecmascript-6">
   import {ERR_OK} from 'api/config'
   import {getRecommend, getDiscList} from 'api/recommend'
-  import 'swiper/dist/css/swiper.css'
-  import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
 
@@ -47,20 +42,7 @@
     data () {
       return {
         recmdSlider: [],
-        discList: [],
-        swiper1: {
-          autoplay: {
-            delay: 3000,
-            // 操作swiper后，不停止循坏
-            disableOnInteraction: false
-          },
-          speed: 1000,
-          loop: true,
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true
-          }
-        }
+        discList: []
       }
     },
     created () {
@@ -87,10 +69,8 @@
       }
     },
     components: {
-      Swiper: swiper,
-      SwiperSlide: swiperSlide,
       Scroll: Scroll,
-      Loading:Loading
+      Loading: Loading
     },
     filters: {
       numFormat (value) {
@@ -110,9 +90,12 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
 
+  .recmd-slider
+    height 170px
+
   .swiper-img
     width 100%
-    height auto
+    height 100%
 
   .disc-list
     .disc-title
@@ -153,6 +136,7 @@
               white-space nowrap
               text-overflow ellipsis
               overflow hidden
+
   .loading-container
     position absolute
     width 100%
@@ -162,10 +146,11 @@
 <style lang="stylus" ref="stylesheet/stylus">
   @import "~common/stylus/variable"
 
-  .swiper-pagination-bullet
+  .mint-swipe-indicator
     background $color-sub-theme
+    opacity 0.8
 
-  .swiper-pagination-bullet-active
+  .mint-swipe-indicator.is-active
     background $color-theme
     width 16px
     height 8px
