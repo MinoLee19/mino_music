@@ -15,7 +15,7 @@
         <div class="middle">
           <div class="middle-l" ref="middleL">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd">
+              <div class="cd" :class="cdClass">
                 <img class="image" :src="currentSong.image">
               </div>
             </div>
@@ -29,25 +29,29 @@
             <span class="dot"></span>
             <span class="dot"></span>
           </div>
+          <!--<mt-range :value="currentTime" :min="0" :max="currentSong.duration" :step="1" :bar-height="3">-->
+          <!--<div slot="start" v-html="format(currentTime)" class="range-text"></div>-->
+          <!--<div slot="end" v-html="format(currentSong.duration)" class="range-text"></div>-->
+          <!--</mt-range>-->
           <div class="progress-wrapper">
-            <span class="time time-l"></span>
+            <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-
+              <progress-bar :percent="percent"></progress-bar>
             </div>
-            <span class="time time-r"></span>
+            <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
             <div class="icon i-left">
               <i></i>
             </div>
-            <div class="icon i-left">
-              <i class="icon-prev"></i>
+            <div class="icon i-left" :class="disableCls">
+              <i class="icon-prev" @click="prev"></i>
             </div>
-            <div class="icon i-center">
-              <i></i>
+            <div class="icon i-center" :class="disableCls">
+              <i @click="togglePlaying" :class="playIcon"></i>
             </div>
-            <div class="icon i-right">
-              <i class="icon-next"></i>
+            <div class="icon i-right" :class="disableCls">
+              <i class="icon-next" @click="next"></i>
             </div>
             <div class="icon i-right">
               <i class="icon"></i>
@@ -59,47 +63,86 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
         <div class="icon">
-          <img width="40" height="40" :src="currentSong.image">
+          <img :class="cdClass" width="40" height="40" :src="currentSong.image">
         </div>
         <div class="text">
           <h2 class="name">{{currentSong.name}}</h2>
           <p class="desc">{{currentSong.singer}}</p>
         </div>
         <div class="control">
-
+          <i :class="miniIcon" @click.stop="togglePlaying"></i>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
-    <audio :src="currentSong.url"></audio>
+    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
   </div>
 </template>
 
 <script>
   import {mapGetters, mapMutations} from 'vuex'
   import {getSongVkey} from 'api/singer'
-  import {currentSong} from '../../store/getters'
+  import ProgressBar from 'base/progress-bar/progress-bar'
 
   export default {
     name: 'player',
+    components: {
+      ProgressBar
+    },
     data () {
       return {
-        vkey: ''
+        vkey: '',
+        songReady: false,
+        currentTime: 0
       }
     },
     computed: {
+      playIcon () {
+        return this.playing ? 'icon-pause' : 'icon-play'
+      },
+      miniIcon () {
+        return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+      },
+      cdClass () {
+        return this.playing ? 'play' : 'play pause'
+      },
+      disableCls () {
+        return this.songReady ? '' : 'disable'
+      },
+      percent() {
+        return this.currentTime / this.currentSong.duration
+      },
       ...mapGetters([
         'fullScreen',
         'playlist',
-        'currentSong'
+        'currentSong',
+        'playing',
+        'currentIndex'
       ])
+    },
+    created () {
+      this.touch = {}
+    },
+    mounted () {
     },
     watch: {
       currentSong: function () {
         getSongVkey(this.currentSong.mid).then(res => {
           this.setCurrentUrl(res.req_0.data.midurlinfo[0].purl)
+          this.$nextTick(() => {
+            // 添加一个延时
+            this.$refs.audio.play()
+          })
+          // selectPlay的时候设置playing为false，在这里设置为true，防止上一首歌点击暂停后选择另一首歌，会播放上一首歌一部分的情况
+          this.setPlayingState(true)
+        })
+      },
+      playing (newPlaying) {
+        const audio = this.$refs.audio
+        this.$nextTick(() => {
+          newPlaying ? audio.play() : audio.pause()
         })
       }
     },
@@ -110,9 +153,64 @@
       open () {
         this.setFullScreen(true)
       },
+      togglePlaying () {
+        if (!this.songReady) {
+          return
+        }
+        this.setPlayingState(!this.playing)
+      },
+      prev () {
+        if (!this.songReady) {
+          return
+        }
+        let index = this.currentIndex - 1
+        if (index === -1) {
+          index = this.playlist.length - 1
+        }
+        this.setCurrentIndex(index)
+        this.songReady = false
+      },
+      next () {
+        if (!this.songReady) {
+          return
+        }
+        let index = this.currentIndex + 1
+        if (index === this.playlist.length) {
+          index = 0
+        }
+        this.setCurrentIndex(index)
+        this.songReady = false
+      },
+      ready () {
+        this.songReady = true
+        console.log(this.songReady)
+      },
+      error () {
+        // 歌曲不能加载时，可点击下一首或者上一首
+        this.songReady = true
+      },
+      updateTime (e) {
+        this.currentTime = e.target.currentTime
+      },
+      format (interval) {
+        interval = interval | 0
+        const minute = interval / 60 | 0
+        const second = this._pad(interval % 60)
+        return `${minute}:${second}`
+      },
+      _pad (num, n = 2) {
+        let len = num.toString().length
+        while (len < n) {
+          num = '0' + num
+          len++
+        }
+        return num
+      },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
-        setCurrentUrl: 'SET_CURRENT_URL'
+        setCurrentUrl: 'SET_CURRENT_URL',
+        setPlayingState: 'SET_PLAYING_STATE',
+        setCurrentIndex: 'SET_CURRENT_INDEX'
       })
     }
   }
@@ -121,6 +219,10 @@
 <style scoped lang="stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
+
+  /* 添加touch-action，防止连续点击报错 */
+  .icon-prev, .icon-next, .icon
+    touch-action none
 
   .player
     .normal-player
@@ -255,7 +357,7 @@
           display: flex
           align-items: center
           width: 80%
-          margin: 0px auto
+          margin: 0 auto
           padding: 10px 0
           .time
             color: $color-text
@@ -358,4 +460,22 @@
       transform: rotate(0)
     100%
       transform: rotate(360deg)
+</style>
+<style lang="stylus">
+  @import "~common/stylus/variable"
+
+  .mt-range-content
+    margin 0 5px
+    .mt-range-runway
+      border-top-color $color-background
+      width 100%
+    .mt-range-progress
+      background $color-theme
+    .mt-range-thumb
+      height 15px
+      width 15px
+      top 50%
+      transform translateY(-50%)
+      background $color-highlight-background
+      box-shadow none
 </style>
