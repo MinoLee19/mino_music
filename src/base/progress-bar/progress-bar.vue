@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-bar" ref="progressBar">
+  <div class="progress-bar" ref="progressBar" @click.stop="progressClick">
     <div class="bar-inner">
       <div class="progress" ref="progress"></div>
       <div class="progress-btn-wrapper" ref="progressBtn"
@@ -49,7 +49,15 @@
         this._offset(offsetWidth)
       },
       progressTouchEnd () {
+        // 将标志位致为false
         this.touch.initiated = false
+        // 将percent提交给父元素，以改变currentTime
+        this._triggerPercent()
+      },
+      progressClick (e) {
+        // 点击进度条
+        // console.log(e.offsetX)
+        this._offset(e.offsetX)
         this._triggerPercent()
       },
       _triggerPercent () {
@@ -58,7 +66,9 @@
         this.$emit('percentChange', percent)
       },
       _offset (offsetWidth) {
+        // 设置progress的长度来体现进度
         this.$refs.progress.style.width = `${offsetWidth}px`
+        // 改变进度条按钮的位置
         this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
       }
     },

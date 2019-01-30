@@ -179,7 +179,7 @@
       },
       ready () {
         this.songReady = true
-        console.log(this.songReady)
+        console.log('songReady:' + this.songReady)
       },
       error () {
         // 歌曲不能加载时，可点击下一首或者上一首
@@ -189,13 +189,17 @@
         this.currentTime = e.target.currentTime
       },
       format (interval) {
+        // 将秒转换为 xx：xx的格式
         interval = interval | 0
         const minute = interval / 60 | 0
+        // 如果当前秒是一个数字，则前面加0
         const second = this._pad(interval % 60)
         return `${minute}:${second}`
       },
       onProgressBarChange (percent) {
+        // 改变currentTime
         this.$refs.audio.currentTime = this.currentSong.duration * percent
+        // 如果当前歌曲是暂停的，改变进度后，让它开始播放
         if (!this.playing) {
           this.togglePlaying()
         }
