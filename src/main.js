@@ -6,7 +6,7 @@ import 'common/stylus/index.styl'
 import router from './router'
 import store from './store'
 import 'mint-ui/lib/style.css'
-import {Swipe, SwipeItem, Lazyload, Range} from 'mint-ui'
+import {Swipe, SwipeItem, Lazyload} from 'mint-ui'
 
 // 消除点击3s延迟
 fastclick.attach(document.body)
@@ -15,7 +15,6 @@ fastclick.attach(document.body)
 Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
 Vue.use(Lazyload)
-Vue.component(Range.name, Range)
 
 /* eslint-disable no-new */
 new Vue({
