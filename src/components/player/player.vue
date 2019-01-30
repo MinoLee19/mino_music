@@ -38,7 +38,7 @@
           </div>
           <div class="operators">
             <div class="icon i-left">
-              <i></i>
+              <i :class="iconMode" @click="changeMode"></i>
             </div>
             <div class="icon i-left" :class="disableCls">
               <i class="icon-prev" @click="prev"></i>
@@ -75,7 +75,8 @@
         </div>
       </div>
     </transition>
-    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
+    <audio :src="currentSong.url" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime"
+           @ended="songEnd"></audio>
   </div>
 </template>
 
@@ -84,6 +85,8 @@
   import {getSongVkey} from 'api/singer'
   import ProgressBar from 'base/progress-bar/progress-bar'
   import ProgressCircle from 'base/progress-circle/progress-circle'
+  import {playMode} from 'common/js/config'
+  import {shuffle} from 'common/js/util'
 
   export default {
     name: 'player',
@@ -115,21 +118,28 @@
       percent () {
         return this.currentTime / this.currentSong.duration
       },
+      iconMode () {
+        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+      },
       ...mapGetters([
         'fullScreen',
         'playlist',
         'currentSong',
         'playing',
-        'currentIndex'
+        'currentIndex',
+        'mode',
+        'sequenceList'
       ])
     },
     created () {
       this.touch = {}
     },
-    mounted () {
-    },
     watch: {
-      currentSong: function () {
+      currentSong: function (newSong, oldSong) {
+        if (newSong.id === oldSong.id) {
+          // 当前歌曲没有变化，不执行任何操作
+          return
+        }
         getSongVkey(this.currentSong.mid).then(res => {
           this.setCurrentUrl(res.req_0.data.midurlinfo[0].purl)
           this.$nextTick(() => {
@@ -209,6 +219,45 @@
           this.togglePlaying()
         }
       },
+      changeMode () {
+        const mode = (this.mode + 1) % 3
+        // 设置当前的播放模式
+        this.setPlayMode(mode)
+        let list = null
+        if (mode === playMode.random) {
+          // 如果当前播放模式是随机，就打乱sequenceList
+          list = shuffle(this.sequenceList)
+        } else {
+          list = this.sequenceList
+        }
+        // 为了保证改变模式时，不影响当前歌曲的播放，设置CurrentIndex为当前歌曲在list中的index
+        this.resetCurrentIndex(list)
+        // 设置当前playlist为list
+        this.setPlaylist(list)
+      },
+      resetCurrentIndex (list) {
+        // 找到当前歌曲的索引
+        let index = list.findIndex((item) => {
+          return item.id === this.currentSong.id
+        })
+        // 设置
+        this.setCurrentIndex(index)
+      },
+      songEnd () {
+        //  一首歌播放结束触发事件
+        if (this.mode === playMode.loop) {
+          // 调用loop方法
+          this.loop()
+        } else {
+          // 如果不是循环单曲，调用next方法，让currentIndex+1
+          this.next()
+        }
+      },
+      loop () {
+        // 单曲循环时，直接设置currentTime为0，并开始播放
+        this.$refs.audio.currentTime = 0
+        this.$refs.audio.play()
+      },
       _pad (num, n = 2) {
         let len = num.toString().length
         while (len < n) {
@@ -221,7 +270,9 @@
         setFullScreen: 'SET_FULL_SCREEN',
         setCurrentUrl: 'SET_CURRENT_URL',
         setPlayingState: 'SET_PLAYING_STATE',
-        setCurrentIndex: 'SET_CURRENT_INDEX'
+        setCurrentIndex: 'SET_CURRENT_INDEX',
+        setPlayMode: 'SET_PLAY_MODE',
+        setPlaylist: 'SET_PLAYLIST'
       })
     }
   }

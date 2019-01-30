@@ -56,8 +56,9 @@
       },
       progressClick (e) {
         // 点击进度条
-        // console.log(e.offsetX)
-        this._offset(e.offsetX)
+        const rect = this.$refs.progressBar.getBoundingClientRect()
+        const offsetWidth = e.pageX - rect.left
+        this._offset(offsetWidth)
         this._triggerPercent()
       },
       _triggerPercent () {
@@ -77,6 +78,7 @@
         if (newPercent >= 0 && !this.touch.initiated) {
           const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
           const offsetWidth = newPercent * barWidth
+          console.log(offsetWidth, barWidth)
           this._offset(offsetWidth)
         }
       }
@@ -100,7 +102,7 @@
         background: $color-theme
       .progress-btn-wrapper
         position: absolute
-        left: -8px
+        left: -7px
         top: -13px
         width: 30px
         height: 30px
