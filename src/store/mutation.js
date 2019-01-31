@@ -24,6 +24,9 @@ const mutations = {
   },
   [types.SET_CURRENT_URL] (state, url) {
     state.playlist[state.currentIndex].url = `http://dl.stream.qqmusic.qq.com/${url}`
+  },
+  [types.SET_DISC] (state, disc) {
+    state.disc = disc
   }
 }
 
