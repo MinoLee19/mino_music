@@ -1,6 +1,6 @@
 <template>
   <div class="recommend" ref="recommend">
-    <scroll>
+    <scroll :mode="mode">
       <div v-if="recmdSlider.length" class="recmd-slider">
         <mt-swipe :auto="3000">
           <mt-swipe-item v-for="(item,index) in recmdSlider" :key="index">
@@ -38,7 +38,8 @@
   import {getRecommend, getDiscList} from 'api/recommend'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
-  import {mapMutations} from 'vuex'
+  import {mapMutations, mapGetters} from 'vuex'
+  import {scrollMode} from 'common/js/config'
 
   export default {
     data () {
@@ -46,6 +47,14 @@
         recmdSlider: [],
         discList: []
       }
+    },
+    computed: {
+      mode () {
+        return this.playlist.length > 0 ? scrollMode.miniPlay : scrollMode.fullScreen
+      },
+      ...mapGetters([
+        'playlist'
+      ])
     },
     created () {
       this._getRecommend()

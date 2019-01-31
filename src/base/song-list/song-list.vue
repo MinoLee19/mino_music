@@ -2,12 +2,12 @@
   <div class="song-list">
     <ul>
       <li class="item" v-for="(song,index) in songs" @click="selectItem(song,index)">
-        <div class="rank">
-          <span></span>
+        <div class="rank" v-show="rank">
+          <span :class="getRankCls(index)">{{getRankText(index)}}</span>
         </div>
         <div class="content">
           <h2 class="name">{{song.name}}</h2>
-          <p class="desc">{{getDesc(song)}} </p>
+          <p class="desc" v-html="getDesc(song)"></p>
         </div>
       </li>
     </ul>
@@ -28,10 +28,22 @@
     },
     methods: {
       getDesc (song) {
-        return `${song.singer} · ${song.album}`
+        return `${song.singer} <b>·</b> ${song.album}`
       },
       selectItem (item, index) {
         this.$emit('select', item, index)
+      },
+      getRankCls (index) {
+        if (index <= 2) {
+          return `icon icon${index}`
+        } else {
+          return 'text'
+        }
+      },
+      getRankText (index) {
+        if (index > 2) {
+          return index + 1
+        }
       }
     }
   }
@@ -40,6 +52,9 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
+
+  .song-list > ul
+    padding 20px 30px
 
   .item
     display: flex
