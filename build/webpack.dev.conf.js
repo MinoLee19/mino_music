@@ -104,7 +104,23 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           headers: {
             referer: 'https://y.qq.com/portal/player.html',
             origin: 'https://y.qq.com',
-            'Content-type':'application/x-www-form-urlencoded'
+            'Content-type': 'application/x-www-form-urlencoded'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      //得到歌单歌曲列表
+      app.get('/getDiscSongList', function (req, res) {
+        var url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        axios.get(url, {
+          headers: {
+            origin: 'https://y.qq.com',
+            referer: `https://y.qq.com/w/taoge.html?ADTAG=myqq&from=myqq&channel=10007100&id=${req.query.disstid}`
           },
           params: req.query
         }).then((response) => {
