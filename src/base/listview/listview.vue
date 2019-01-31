@@ -1,5 +1,6 @@
 <template>
-  <scroll :data="data" class="listview" :listenScroll="listenScroll" @scroll="scroll" ref="listview">
+  <scroll :data="data" class="listview" :listenScroll="listenScroll" @scroll="scroll" ref="listview"
+          :mode="mode">
     <div class="loading-container" v-show="!data.length">
       <loading></loading>
     </div>
@@ -33,6 +34,8 @@
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
   import {getData} from 'common/js/dom'
+  import {mapGetters} from 'vuex'
+  import {scrollMode} from 'common/js/config'
 
   const ANCHOR_HEIGHT = 18
   const TITLE_HEIGHT = 30
@@ -44,6 +47,13 @@
         default: []
       }
     },
+    data () {
+      return {
+        scrollY: -1,
+        currentIndex: 0,
+        diff: -1
+      }
+    },
     computed: {
       shortcutList () {
         return this.data.map((group) => {
@@ -52,14 +62,13 @@
       },
       fixedTitle () {
         return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
-      }
-    },
-    data () {
-      return {
-        scrollY: -1,
-        currentIndex: 0,
-        diff: -1
-      }
+      },
+      mode () {
+        return this.playlist.length > 0 ? scrollMode.miniPlay : scrollMode.fullScreen
+      },
+      ...mapGetters([
+        'playlist'
+      ])
     },
     created () {
       // 不在data中创建的原因：在vue中，写在data和props中的数据会默认进行监听，这里不需要

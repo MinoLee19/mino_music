@@ -5,12 +5,13 @@
 </template>
 
 <script>
+  import {scrollMode} from 'common/js/config'
+
   export default {
     name: 'scroll',
     data () {
       return {
-        clientHeight: document.documentElement.clientHeight || document.body.clientHeight,
-        contentHeight: 0
+        clientHeight: document.documentElement.clientHeight || document.body.clientHeight
       }
     },
     props: {
@@ -20,26 +21,27 @@
           return []
         }
       },
-      // 若不是自动填充高度的模式，可指定一个高度，默认是200
       height: {
         type: Number,
         default: 200
       },
-      // true为自动填充高度的模式，false是指定高度的模式
       mode: {
-        type: Boolean,
-        default: true
+        type: Number,
+        default: scrollMode.fullScreen
       },
       listenScroll: {
         type: Boolean,
         default: false
       }
     },
+    created () {
+      this.contentHeight = 0
+    },
     mounted () {
       this._initHeight()
 
       // 自动检测浏览器高度的变化，改变scroll的高度
-      if (this.mode) {
+      if (this.mode !== scrollMode.assign) {
         window.onresize = () => {
           this.clientHeight = document.documentElement.clientHeight || document.body.clientHeight
         }
@@ -57,20 +59,28 @@
     },
     methods: {
       _initHeight () {
-        if (this.mode) {
-          // 90为tab和header的高度的和
+        if (this.mode === scrollMode.fullScreen) {
           this.contentHeight = this.clientHeight - 90
-        } else {
+        } else if (this.mode === scrollMode.miniPlay) {
+          this.contentHeight = this.clientHeight - 150
+        } else if (this.mode === scrollMode.assign) {
           this.contentHeight = this.height
+        } else if (this.mode === scrollMode.detailNo) {
+          this.contentHeight = this.clientHeight - 40
+        } else if (this.mode === scrollMode.detail) {
+          this.contentHeight = this.clientHeight - 100
         }
         this.$refs.scroll.style.height = this.contentHeight + 'px'
       }
     },
     watch: {
-      clientHeight: {
-        handler: function () {
-          this._initHeight()
-        }
+      clientHeight () {
+        // 如果窗口的高度发生变化，重新初始化scroll的高
+        this._initHeight()
+      },
+      mode () {
+        // 如果父元素传入的模式有变化，就重新初始化scroll的高度
+        this._initHeight()
       }
     }
   }

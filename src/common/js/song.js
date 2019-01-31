@@ -12,7 +12,7 @@ export default class Song {
 }
 
 export function createSong (musicData) {
-  // 歌手歌曲
+  // 歌手歌曲 // 排行榜歌曲
   return new Song({
     id: musicData.songid,
     mid: musicData.songmid,

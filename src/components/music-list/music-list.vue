@@ -4,10 +4,7 @@
       <i class="icon-back"></i>
     </div>
     <h1 class="title" v-html="title"></h1>
-    <scroll :data="songs"
-            :mode="scrollMode"
-            :height="scrollHeight"
-            class="list">
+    <scroll :data="songs" class="list" :mode="mode">
       <div class="bg-image" :style="bgStyle">
         <div class="play-wrapper">
           <div ref="playBtn" class="play" v-show="songs.length>0" @click="random">
@@ -17,7 +14,7 @@
         </div>
         <div class="filter"></div>
       </div>
-      <song-list :songs="songs" @select="selectItem"></song-list>
+      <song-list :songs="songs" @select="selectItem" :rank="rank"></song-list>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
       </div>
@@ -29,9 +26,8 @@
   import SongList from 'base/song-list/song-list'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
-  import {mapActions} from 'vuex'
-
-  const RESERVED_HEIGHT = 40
+  import {mapActions, mapGetters} from 'vuex'
+  import {scrollMode} from 'common/js/config'
 
   export default {
     props: {
@@ -48,16 +44,22 @@
       title: {
         type: String,
         default: ''
+      },
+      rank: {
+        type: Boolean,
+        default: false
       }
-    },
-    created () {
-      this.scrollMode = false
-      this.scrollHeight = document.documentElement.clientHeight - RESERVED_HEIGHT || document.body.clientHeight - RESERVED_HEIGHT
     },
     computed: {
+      mode () {
+        return this.playlist.length > 0 ? scrollMode.detail : scrollMode.detailNo
+      },
       bgStyle () {
         return `background-image:url(${this.bgImage})`
-      }
+      },
+      ...mapGetters([
+        'playlist'
+      ])
     },
     components: {
       SongList,
