@@ -19,16 +19,9 @@
                 <img class="image" :src="currentSong.image">
               </div>
             </div>
-            <div class="playing-lyric-wrapper">
-              <div class="playing-lyric"></div>
-            </div>
           </div>
         </div>
         <div class="bottom">
-          <div class="dot-wrapper">
-            <span class="dot"></span>
-            <span class="dot"></span>
-          </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -348,7 +341,7 @@
           .cd-wrapper
             position: absolute
             left: 10%
-            top: 0
+            top: 20%
             width: 80%
             height: 100%
             .cd
@@ -368,53 +361,10 @@
                 width: 100%
                 height: 100%
                 border-radius: 50%
-
-          .playing-lyric-wrapper
-            width: 80%
-            margin: 30px auto 0 auto
-            overflow: hidden
-            text-align: center
-            .playing-lyric
-              height: 20px
-              line-height: 20px
-              font-size: $font-size-medium
-              color: $color-text-l
-        .middle-r
-          display: inline-block
-          vertical-align: top
-          width: 100%
-          height: 100%
-          overflow: hidden
-          .lyric-wrapper
-            width: 80%
-            margin: 0 auto
-            overflow: hidden
-            text-align: center
-            .text
-              line-height: 32px
-              color: $color-text-l
-              font-size: $font-size-medium
-              &.current
-                color: $color-text
       .bottom
         position: absolute
         bottom: 50px
         width: 100%
-        .dot-wrapper
-          text-align: center
-          font-size: 0
-          .dot
-            display: inline-block
-            vertical-align: middle
-            margin: 0 4px
-            width: 8px
-            height: 8px
-            border-radius: 50%
-            background: $color-text-l
-            &.active
-              width: 20px
-              border-radius: 5px
-              background: $color-text-ll
         .progress-wrapper
           display: flex
           align-items: center
@@ -522,22 +472,4 @@
       transform: rotate(0)
     100%
       transform: rotate(360deg)
-</style>
-<style lang="stylus">
-  @import "~common/stylus/variable"
-
-  .mt-range-content
-    margin 0 5px
-    .mt-range-runway
-      border-top-color $color-background
-      width 100%
-    .mt-range-progress
-      background $color-theme
-    .mt-range-thumb
-      height 15px
-      width 15px
-      top 50%
-      transform translateY(-50%)
-      background $color-highlight-background
-      box-shadow none
 </style>
