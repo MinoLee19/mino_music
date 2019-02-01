@@ -25,7 +25,7 @@ export function createSong (musicData) {
 }
 
 export function createDiscSong (item) {
-  // 歌单歌曲
+  // 歌单歌曲 //搜索歌曲
   return new Song({
     id: item.id,
     mid: item.mid,

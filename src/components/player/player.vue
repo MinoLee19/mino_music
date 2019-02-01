@@ -192,6 +192,8 @@
       error () {
         // 歌曲不能加载时，可点击下一首或者上一首
         this.songReady = true
+        // 当前歌曲错误，跳转到下一首
+        this.next()
       },
       updateTime (e) {
         this.currentTime = e.target.currentTime

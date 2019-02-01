@@ -13,5 +13,8 @@ export const scrollMode = {
   assign: 2,
   // singerDetail 没有mini播放器
   detailNo: 3,
-  detail: 4
+  detail: 4,
+  // 搜索页面，有、无miniplayer
+  searchNo: 5,
+  search: 6
 }
