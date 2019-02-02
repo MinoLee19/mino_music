@@ -1,4 +1,4 @@
-import {commonParams} from '../api/config'
+import {commonParams} from 'api/config'
 import axios from 'axios'
 
 export function getToplist () {

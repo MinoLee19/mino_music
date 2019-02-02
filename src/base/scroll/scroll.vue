@@ -69,6 +69,10 @@
           this.contentHeight = this.clientHeight - 40
         } else if (this.mode === scrollMode.detail) {
           this.contentHeight = this.clientHeight - 100
+        } else if (this.mode === scrollMode.searchNo) {
+          this.contentHeight = this.clientHeight - 170
+        } else if (this.mode === scrollMode.search) {
+          this.contentHeight = this.clientHeight - 230
         }
         this.$refs.scroll.style.height = this.contentHeight + 'px'
       }

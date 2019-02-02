@@ -161,6 +161,38 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       })
+
+      //  获得热门搜索词
+      app.get('/getHotKey', function (req, res) {
+        var url = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
+        axios.get(url, {
+          headers: {
+            origin: 'https://y.qq.com',
+            referer: 'https://y.qq.com/m/index.html'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      //  搜索
+      app.get('/keySearch', function (req, res) {
+        var url = 'https://c.y.qq.com/soso/fcgi-bin/client_search_cp'
+        axios.get(url, {
+          headers: {
+            origin: 'https://y.qq.com',
+            referer: 'https://y.qq.com/portal/search.html'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
     }
   },
   plugins: [
