@@ -116,30 +116,32 @@
 
   .disc-list
     .disc-title
-      height 65px
-      line-height 65px
+      height 60px
+      line-height 60px
       text-align center
       font-size $font-size-medium
       color $color-theme
     ul
+      padding 0 20px 20px 20px
       .disc-item
         display flex
-        box-sizing border-box
         align-items center
-        padding 0 20px 20px 20px
+        height 80px
+        width 100%
         .disc-img
           width 60px
-          padding-right 20px
+          height 60px
+          margin-right 20px
         .disc-text
           display flex
-          flex-direction column
-          justify-content center
           flex 1
+          flex-direction column
+          justify-content space-around
           line-height 20px
+          height 60px
           overflow: hidden
           font-size $font-size-medium
           .name
-            margin-bottom: 10px
             color $color-text
             white-space nowrap
             text-overflow ellipsis
@@ -153,12 +155,6 @@
               white-space nowrap
               text-overflow ellipsis
               overflow hidden
-
-  .loading-container
-    position absolute
-    width 100%
-    top: 50%
-    transform translateY(-50%)
 </style>
 <style lang="stylus" ref="stylesheet/stylus">
   @import "~common/stylus/variable"

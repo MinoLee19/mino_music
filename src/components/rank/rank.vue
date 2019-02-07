@@ -1,7 +1,7 @@
 <template>
   <div class="rank" ref="rank">
-    <scroll class="toplist" ref="toplist" :data="topList" :mode="mode">
-      <ul v-show="topList.length>0">
+    <scroll ref="toplist" :data="topList" :mode="mode">
+      <ul v-show="topList.length>0" class="toplist">
         <li class="item" v-for="item of topList" @click="selectItem(item)">
           <div class="icon">
             <img width="100" height="100" v-lazy="item.picUrl"/>
@@ -81,15 +81,13 @@
   .rank
     width: 100%
     .toplist
+      display flex
+      flex-direction column
+      margin 20px 20px 0 20px
       .item
         display: flex
-        margin: 0 20px
-        padding-top: 20px
-        height: 100px
-        &:last-child
-          padding-bottom: 20px
+        height: 120px
         .icon
-          flex: 0 0 100px
           width: 100px
           height: 100px
         .songlist
@@ -106,9 +104,4 @@
           .song
             no-wrap()
             line-height: 26px
-      .loading-container
-        position: absolute
-        width: 100%
-        top: 50%
-        transform: translateY(-50%)
 </style>

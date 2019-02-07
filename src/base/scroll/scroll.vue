@@ -66,9 +66,9 @@
         } else if (this.mode === scrollMode.assign) {
           this.contentHeight = this.height
         } else if (this.mode === scrollMode.detailNo) {
-          this.contentHeight = this.clientHeight - 40
+          this.contentHeight = this.clientHeight - 45
         } else if (this.mode === scrollMode.detail) {
-          this.contentHeight = this.clientHeight - 100
+          this.contentHeight = this.clientHeight - 105
         } else if (this.mode === scrollMode.searchNo) {
           this.contentHeight = this.clientHeight - 170
         } else if (this.mode === scrollMode.search) {

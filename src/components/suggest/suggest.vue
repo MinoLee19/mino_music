@@ -1,14 +1,10 @@
 <template>
-  <scroll class="suggest" :mode="mode">
+  <scroll :mode="mode">
     <ul class="suggest-list" ref="suggest">
-      <li ref="title" class="suggest-item name">搜索结果:</li>
+      <li ref="title" class="suggest-item">搜索结果:</li>
       <li class="suggest-item" v-for="item of result" @click="selectItem(item)">
-        <div class="icon">
-          <i :class="getIconCls(item)"></i>
-        </div>
-        <div class="name">
-          <p class="text" v-html="getDisplayName(item)"></p>
-        </div>
+        <i class="icon" :class="getIconCls(item)"></i>
+        <p class="text" v-html="getDisplayName(item)"></p>
       </li>
     </ul>
     <span class="loadmore" @click="loadmore" v-show="hasMore">点击加载更多</span>
@@ -74,9 +70,9 @@
       },
       getIconCls (item) {
         if (item.type === TYPE_SINGER) {
-          return 'icon-mine'
+          return 'icon-geshou'
         } else {
-          return 'icon-music'
+          return 'icon-icon-1'
         }
       },
       getDisplayName: function (item) {
@@ -160,38 +156,25 @@
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
-  .suggest
-    .suggest-list
-      height auto
-      padding: 0 30px
-      .suggest-item
-        display: flex
-        align-items: center
-        height 36px
+  .suggest-list
+    padding 0 20px
+    .suggest-item
+      display: flex
+      align-items: center
+      height 35px
+      color $color-text-l
       .icon
-        flex: 0 0 30px
-        width: 30px
-        [class^="icon-"]
-          font-size: 14px
-          color: $color-text-l
-      .name
-        flex: 1
-        font-size: $font-size-medium
-        color: $color-text-l
-        overflow: hidden
-        .text
-          no-wrap()
-    .loadmore
-      font-size $font-size-small
-      color $color-text-d
-      display flex
-      align-items center
-      justify-content center
-      height 30px
-    .no-result-wrapper
-      position: absolute
-      width: 100%
-      top: 50%
-      transform: translateY(-50%)
+        margin-right 5px
+        font-size 18px
+      .text
+        font-size $font-size-medium
+        no-wrap()
 
+  .loadmore
+    font-size $font-size-small
+    color $color-text-d
+    display flex
+    align-items center
+    justify-content center
+    height 35px
 </style>

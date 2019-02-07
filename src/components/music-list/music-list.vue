@@ -1,18 +1,17 @@
 <template>
   <div class="music-list">
-    <div class="back" @click="back">
-      <i class="icon-back"></i>
-    </div>
-    <h1 class="title" v-html="title"></h1>
-    <scroll :data="songs" class="list" :mode="mode">
+    <mt-header :title="title">
+      <mt-button icon="back" slot="left" @click="back"></mt-button>
+    </mt-header>
+    <scroll :data="songs" :mode="mode">
       <div class="bg-image" :style="bgStyle">
+        <div class="filter"></div>
         <div class="play-wrapper">
           <div ref="playBtn" class="play" v-show="songs.length>0" @click="random">
-            <i class="icon-play"></i>
+            <i class="icon icon-icon-9"></i>
             <span class="text">随机播放全部</span>
           </div>
         </div>
-        <div class="filter"></div>
       </div>
       <song-list :songs="songs" @select="selectItem" :rank="rank"></song-list>
       <div class="loading-container" v-show="!songs.length">
@@ -92,81 +91,41 @@
   @import "~common/stylus/mixin"
 
   .music-list
-    position: fixed
-    z-index: 100
-    top: 0
-    left: 0
-    bottom: 0
-    right: 0
-    background: $color-background
-    .back
-      position absolute
-      top: 0
-      left: 6px
-      z-index: 50
-      .icon-back
-        display: block
-        padding: 10px
-        font-size: $font-size-large-x
-        color: $color-theme
-    .title
-      position: absolute
-      top: 0
-      left: 10%
-      z-index: 40
-      width: 80%
-      no-wrap()
-      text-align: center
-      line-height: 40px
-      font-size: $font-size-large
-      color: $color-text
+    position fixed
+    z-index 20
+    top 0
+    left 0
+    bottom 0
+    right 0
+    background $color-background
     .bg-image
-      position: relative
-      width: 100%
-      height: 260px
-      transform-origin: top
-      background-size: cover
-      .play-wrapper
-        position: absolute
-        bottom: 20px
-        z-index: 50
-        width: 100%
-        .play
-          box-sizing: border-box
-          width: 135px
-          padding: 7px 0
-          margin: 0 auto
-          text-align: center
-          border: 1px solid $color-theme
-          color: $color-theme
-          border-radius: 100px
-          font-size: 0
-          .icon-play
-            display: inline-block
-            vertical-align: middle
-            margin-right: 6px
-            font-size: $font-size-medium-x
-          .text
-            display: inline-block
-            vertical-align: middle
-            font-size: $font-size-small
+      position relative
+      width 100%
+      height 260px
+      background-size cover
       .filter
         position: absolute
         top: 0
         left: 0
         width: 100%
         height: 100%
-        background: rgba(7, 17, 27, 0.4)
+        background: rgba(0, 0, 0, 0.3)
+      .play-wrapper
+        position absolute
+        bottom 20px
+        z-index 30
+        width 100%
+        .play
+          width 135px
+          padding 7px 10px
+          margin 0 auto
+          display flex
+          align-items center
+          border 1px solid $color-theme
+          color $color-theme
+          border-radius 100px
+          .text
+            font-size: $font-size-small
+            margin-left 10px
 
-  .list
-    position fixed
-    top 40px
-    background-color $color-background
-    z-index 100
-
-  .loading-container
-    position: absolute
-    width: 100%
-    top: 50%
-    transform: translateY(-50%)
 </style>

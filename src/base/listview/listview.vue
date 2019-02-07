@@ -1,13 +1,10 @@
 <template>
-  <scroll :data="data" class="listview" :listenScroll="listenScroll" @scroll="scroll" ref="listview"
+  <scroll :data="data" :listenScroll="listenScroll" @scroll="scroll" ref="listview"
           :mode="mode">
-    <div class="loading-container" v-show="!data.length">
-      <loading></loading>
-    </div>
     <ul ref="listUl">
-      <li v-for="group in data" class="list-group" ref="listGroup">
+      <li v-for="group in data" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
-        <ul>
+        <ul class="list-group-content">
           <li v-for="item in group.items" class="list-group-item" @click="selectItem(item)">
             <img class="avatar" v-lazy="item.pic">
             <span class="name">{{item.name}}</span>
@@ -25,7 +22,10 @@
       </ul>
     </div>
     <div class="list-fixed" ref="fixed" v-show="fixedTitle">
-      <div class="fixed-title">{{fixedTitle}}</div>
+      <div class="list-group-title">{{fixedTitle}}</div>
+    </div>
+    <div class="loading-container" v-show="!data.length">
+      <loading></loading>
     </div>
   </scroll>
 </template>
@@ -171,64 +171,51 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
 
-  .listview
+  .list-group-title
+    height: 30px
+    line-height: 30px
+    padding-left: 20px
+    font-size: $font-size-small
+    color: $color-text-l
+    background: $color-highlight-background
+
+  .list-group-content
+    padding 0 30px
+    .list-group-item
+      display flex
+      align-items center
+      height 80px
+      .avatar
+        width: 50px
+        height: 50px
+        border-radius: 50%
+      .name
+        margin-left: 20px
+        color: $color-text-l
+        font-size: $font-size-medium
+
+  .list-shortcut
+    position: fixed
+    z-index: 10
+    right: 0
+    top: 50%
+    transform: translateY(-50%)
+    width: 20px
+    padding: 20px 0
+    border-radius: 10px
+    text-align: center
+    background: $color-background-d
+    .item
+      line-height 1.5
+      color $color-text-l
+      font-size $font-size-small
+      &.current
+        color $color-theme
+
+  .list-fixed
+    position: fixed
+    z-index 1
+    top: 90px
+    left: 0
     width: 100%
-    background: $color-background
-    .list-group
-      padding-bottom: 30px
-      .list-group-title
-        height: 30px
-        line-height: 30px
-        padding-left: 20px
-        font-size: $font-size-small
-        color: $color-text-l
-        background: $color-highlight-background
-      .list-group-item
-        display: flex
-        align-items: center
-        padding: 20px 0 0 30px
-        .avatar
-          width: 50px
-          height: 50px
-          border-radius: 50%
-        .name
-          margin-left: 20px
-          color: $color-text-l
-          font-size: $font-size-medium
-    .list-shortcut
-      position: fixed
-      z-index: 30
-      right: 0
-      top: 55%
-      transform: translateY(-50%)
-      width: 20px
-      padding: 20px 0
-      border-radius: 10px
-      text-align: center
-      background: $color-background-d
-      font-family: Helvetica
-      .item
-        padding: 3px
-        line-height: 1
-        color: $color-text-l
-        font-size: $font-size-small
-        &.current
-          color: $color-theme
-    .list-fixed
-      position: fixed
-      top: 90px
-      left: 0
-      width: 100%
-      .fixed-title
-        height: 30px
-        line-height: 30px
-        padding-left: 20px
-        font-size: $font-size-small
-        color: $color-text-l
-        background: $color-highlight-background
-    .loading-container
-      position: absolute
-      width: 100%
-      top: 50%
-      transform: translateY(-50%)
 </style>

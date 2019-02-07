@@ -7,7 +7,7 @@
         </div>
         <div class="top">
           <div class="back" @click="back">
-            <i class="icon-back"></i>
+            <i class="icon icon-back"></i>
           </div>
           <h1 class="title">{{currentSong.name}}</h1>
           <h2 class="subtitle">{{currentSong.singer}}</h2>
@@ -30,19 +30,19 @@
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
-            <div class="icon i-left">
-              <i :class="iconMode" @click="changeMode"></i>
+            <div class="i-left">
+              <i :class="iconMode" @click="changeMode" class="icon"></i>
             </div>
-            <div class="icon i-left" :class="disableCls">
-              <i class="icon-prev" @click="prev"></i>
+            <div class="i-left" :class="disableCls">
+              <i class="icon-icon-3 icon" @click="prev"></i>
             </div>
-            <div class="icon i-center" :class="disableCls">
-              <i @click="togglePlaying" :class="playIcon"></i>
+            <div class="i-center" :class="disableCls">
+              <i @click="togglePlaying" :class="playIcon" class="icon"></i>
             </div>
-            <div class="icon i-right" :class="disableCls">
-              <i class="icon-next" @click="next"></i>
+            <div class="i-right" :class="disableCls">
+              <i class="icon icon-icon-2" @click="next"></i>
             </div>
-            <div class="icon i-right">
+            <div class="i-right">
               <i class="icon"></i>
             </div>
           </div>
@@ -51,7 +51,7 @@
     </transition>
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
-        <div class="icon">
+        <div class="cd">
           <img :class="cdClass" width="40" height="40" :src="currentSong.image">
         </div>
         <div class="text">
@@ -60,11 +60,11 @@
         </div>
         <div class="control">
           <progress-circle :radius="radius" :percent="percent">
-            <i :class="miniIcon" @click.stop="togglePlaying" class="icon-mini"></i>
+            <i :class="playIcon" @click.stop="togglePlaying" class="icon"></i>
           </progress-circle>
         </div>
         <div class="control">
-          <i class="icon-playlist"></i>
+          <i class="icon icon-icon-"></i>
         </div>
       </div>
     </transition>
@@ -97,7 +97,7 @@
     },
     computed: {
       playIcon () {
-        return this.playing ? 'icon-pause' : 'icon-play'
+        return this.playing ? 'icon-icon-4' : 'icon-icon-9'
       },
       miniIcon () {
         return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
@@ -112,7 +112,7 @@
         return this.currentTime / this.currentSong.duration
       },
       iconMode () {
-        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+        return this.mode === playMode.sequence ? 'icon-icon-6' : this.mode === playMode.loop ? 'icon-icon-5' : 'icon-icon-8'
       },
       ...mapGetters([
         'fullScreen',
@@ -288,7 +288,7 @@
       right: 0
       top: 0
       bottom: 0
-      z-index: 150
+      z-index: 40
       background: $color-background
       .background
         position: absolute
@@ -306,7 +306,7 @@
           position absolute
           top: 0
           left: 6px
-          z-index: 50
+          line-height 40px
           .icon-back
             display: block
             padding: 9px
@@ -388,7 +388,7 @@
         .operators
           display: flex
           align-items: center
-          .icon
+          > div
             flex: 1
             color: $color-theme
             &.disable
@@ -417,25 +417,25 @@
         .bottom
           transform: translate3d(0, 100px, 0)
     .mini-player
-      display: flex
-      align-items: center
-      position: fixed
-      left: 0
-      bottom: 0
-      z-index: 180
-      width: 100%
-      height: 60px
-      background: $color-highlight-background
+      display flex
+      align-items center
+      position fixed
+      left 0
+      bottom 0
+      z-index 60
+      width 100%
+      height 60px
+      background $color-highlight-background
       &.mini-enter-active, &.mini-leave-active
-        transition: all 0.4s
+        transition all 0.4s
       &.mini-enter, &.mini-leave-to
-        opacity: 0
-      .icon
-        flex: 0 0 40px
-        width: 40px
-        padding: 0 10px 0 20px
+        opacity 0
+      .cd
+        width 80px
+        padding 0 10px 0 20px
         img
           border-radius: 50%
+          width 40px
           &.play
             animation: rotate 10s linear infinite
           &.pause
@@ -457,13 +457,14 @@
           font-size: $font-size-small
           color: $color-text-d
       .control
-        flex: 0 0 30px
-        width: 30px
-        padding: 0 10px
-        .icon-play-mini, .icon-pause-mini, .icon-playlist
+        width: 32px
+        height 32px
+        margin: 0 10px
+        position relative
+        .icon-icon-4, .icon-icon-9, .icon-icon-
           font-size: 30px
           color: $color-theme-d
-        .icon-mini
+        .icon
           font-size: 32px
           position: absolute
           left: 0
